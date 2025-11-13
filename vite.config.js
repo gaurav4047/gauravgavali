@@ -8,11 +8,11 @@ module.exports = defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'portfolio.html'),
+        main: resolve(__dirname, 'index.html'),
       },
     },
   },
   server: {
-    open: '/portfolio.html',
+    open: '/index.html',
   },
 });
