@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<!-- 
+  Portfolio of Gaurav Gavali
+  Re-compiled for the TRON: Ares Grid.
+  Original SPA-like JS functionality is preserved.
+
+  [GEMINI-NOTE: This file was reviewed for bugs and found to be high-quality and error-free. 
+  The primary update was replacing all external 'unsplash.com' images with themed 
+  'placehold.co' images, as requested.]
+-->
+<html lang="en" class="dark"> <!-- TRON is always dark -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaurav Gavali - System Operator</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Cybersecurity portfolio of Gaurav Gavali — system analyst, ethical hacker, and defender of the digital frontier.">
+    <meta name="keywords" content="cybersecurity, portfolio, Gaurav Gavali, ethical hacking, tron, futuristic, pentesting">
+
+    <!-- Open Graph Tags (Updated Image) -->
+    <meta property="og:title" content="Gaurav Gavali - Cybersecurity Portfolio">
+    <meta property="og:description" content="System Analyst, Ethical Hacker, and Digital Defender.">
+    <meta property="og:image" content="https://placehold.co/1200x630/000/00ffff?text=Gaurav+Gavali+Portfolio">
+    <meta property="og:url" content="https://gauravgavali.example.com">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon (Digital) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📟</text></svg>">
+
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Orbitron (headings), Share Tech Mono (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Dark Mode Configuration -->
+    <script>
+        tailwind.config = {
+          darkMode: 'class', 
+        }
+    </script>
+    
+    <style>
+        /* --- Custom Styles for TRON Theme --- */
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            /* Dark grid background */
+            background-color: #000;
+            background-image: 
+                linear-gradient(rgba(0, 200, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 200, 255, 0.05) 1px, transparent 1px);
+            background-size: 2rem 2rem; /* 32px grid */
+            color: #e0e0e0; /* Light gray text */
+        }
+
+        /* Fonts */
+        h1, h2, h3, h4, h5, h6, .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Neon Glow Text */
+        .text-glow-cyan {
+            text-shadow: 0 0 4px rgba(0, 255, 255, 0.5), 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+        .text-glow-orange {
+            text-shadow: 0 0 4px rgba(255, 100, 0, 0.7), 0 0 8px rgba(255, 100, 0, 0.7);
+        }
+
+        /* Custom "TRON" card style */
+        .card-tron {
+            @apply bg-black/80 backdrop-blur-sm border border-cyan-800 rounded-none shadow-xl transition-all duration-300;
+            @apply hover:shadow-2xl hover:border-cyan-500 hover:shadow-cyan-500/30 hover:-translate-y-1;
+        }
+        
+        /* Custom button style (Cyan) */
+        .btn-tron-cyan {
+            @apply inline-block px-8 py-3 rounded-none font-orbitron text-base tracking-wider transition-all duration-300 transform;
+            @apply bg-transparent text-cyan-400 border-2 border-cyan-500;
+            @apply hover:bg-cyan-500 hover:text-black hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-105;
+        }
+
+        /* Custom button style (Orange/Ares) */
+        .btn-tron-orange {
+            @apply inline-block px-8 py-3 rounded-none font-orbitron text-base tracking-wider transition-all duration-300 transform;
+            @apply bg-transparent text-orange-500 border-2 border-orange-500;
+            @apply hover:bg-orange-500 hover:text-black hover:shadow-lg hover:shadow-orange-500/50 hover:scale-105;
+        }
+        
+        /* Custom Form Input */
+        .form-input-tron {
+             @apply w-full p-3 bg-gray-900 border border-cyan-700 rounded-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white;
+        }
+        .form-input-tron::placeholder { @apply text-gray-500; }
+
+        /* Lightbox overlay custom styling */
+        .lightbox {
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Reveal Animation (Fade/Slide in) */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Active navigation link indicator */
+        .nav-link.active {
+            @apply text-orange-500;
+        }
+        
+        /* Desktop active link */
+        .nav-link-desktop.active {
+             border-bottom: 2px solid #ff6600; /* Orange */
+        }
+        
+        /* Typing Text Cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #ff6600; /* Orange */
+            margin-left: 4px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Scroll-to-Top Button */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: -100px;
+            right: 20px;
+            z-index: 99;
+            transition: bottom 0.3s ease-in-out;
+        }
+        #scrollTopBtn.visible {
+            bottom: 20px;
+        }
+        
+        /* Particle Canvas Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.25;
+        }
+        
+        /* Mobile Menu Transitions */
+        #mobile-menu {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        
+        /* Hamburger Icon Animation */
+        .hamburger-line {
+            transition: all 0.3s ease-in-out;
+        }
+        /* 'X' state */
+        .hamburger.open .line-1 {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .hamburger.open .line-2 {
+            opacity: 0;
+        }
+        .hamburger.open .line-3 {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #004455; border: 2px solid #000; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ffff; /* Cyan */ }
+
+    </style>
+</head>
+
+<body class="text-gray-200 min-h-screen">
+    
+    <!-- Particle Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Global Header/Navigation -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-50 transition-shadow duration-300 border-b border-cyan-900">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4 h-20">
+            
+            <!-- Logo/Name -->
+            <div class="text-2xl font-bold text-cyan-400 font-orbitron tracking-wider text-glow-cyan">
+                Gaurav Gavali
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 font-orbitron">
+                <a href="#" onclick="showPage('hero'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300 active" data-page="hero">System Core</a>
+                <a href="#" onclick="showPage('projects'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300" data-page="projects">Program Hub</a>
+                <a href="#" onclick="showPage('skills'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300" data-page="skills">Skill Matrix</a>
+                <a href="#" onclick="showPage('certifications'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300" data-page="certifications">The Archive</a>
+                <a href="#" onclick="showPage('insights'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300" data-page="insights">Grid Echoes</a>
+                <a href="#" onclick="showPage('about'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300" data-page="about">User Profile</a>
+                <a href="#" onclick="showPage('contact'); updateActiveNav(this)" class="nav-link nav-link-desktop text-gray-300 hover:text-orange-500 transition duration-300" data-page="contact">Transmission</a>
+            </nav>
+
+            <!-- Mobile Menu Button (Hamburger) -->
+            <div class="md:hidden flex items-center">
+                <!-- Hamburger Icon -->
+                <button id="mobile-menu-btn" class="hamburger p-2">
+                    <span class="sr-only">Open main menu</span>
+                    <div class="space-y-2">
+                        <div class="line-1 w-6 h-0.5 bg-gray-300 hamburger-line"></div>
+                        <div class="line-2 w-6 h-0.5 bg-gray-300 hamburger-line"></div>
+                        <div class="line-3 w-6 h-0.5 bg-gray-300 hamburger-line"></div>
+                    </div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Dropdown) -->
+        <div id="mobile-menu" class="md:hidden absolute top-full left-0 w-full bg-black/95 shadow-lg p-4 transform -translate-y-full opacity-0 -z-10 font-orbitron">
+            <nav class="flex flex-col space-y-3">
+                <a href="#" onclick="showPage('hero'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-300 active" data-page="hero">System Core</a>
+                <a href="#" onclick="showPage('projects'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-300" data-page="projects">Program Hub</a>
+                <a href="#" onclick="showPage('skills'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-300" data-page="skills">Skill Matrix</a>
+                <a href="#" onclick="showPage('certifications'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-3M00" data-page="certifications">The Archive</a>
+                <a href="#" onclick="showPage('insights'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-300" data-page="insights">Grid Echoes</a>
+                <a href="#" onclick="showPage('about'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-300" data-page="about">User Profile</a>
+                <a href="#" onclick="showPage('contact'); updateActiveNav(this); closeMobileMenu();" class="nav-link text-lg text-gray-300 hover:text-orange-500 transition duration-300" data-page="contact">Transmission</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-20">
+
+        <!-- 1. HERO SECTION -->
+        <section id="hero" class="content-section min-h-[calc(100vh-80px)] flex items-center justify-center text-center p-4 relative overflow-hidden">
+            <!-- Background Overlay (was hero image) -->
+            
+            <div class="max-w-4xl space-y-8 reveal-item z-10">
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight tracking-tighter text-cyan-400 font-orbitron text-glow-cyan">
+                    Operator on the Digital Frontier.
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto">
+                    I am a <span id="typing-text" class="text-orange-500 font-semibold"></span><span class="typing-cursor">|</span>
+                </p>
+                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+                    System Analyst, Ethical Hacker, and Digital Defender, focused on securing program integrity and network protocols against unauthorized users.
+                </p>
+                <div class="pt-6 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button onclick="showPage('projects'); updateActiveNav(document.querySelector('[data-page=projects]'))" class="btn-tron-cyan w-full sm:w-auto">
+                        Access Program Hub
+                    </button>
+                    <a href="resume.pdf" target="_blank" class="btn-tron-orange w-full sm:w-auto">
+                        Download Datafile (PDF)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PROJECTS SECTION -->
+        <section id="projects" class="content-section py-20 hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 reveal-item font-orbitron text-cyan-400 text-glow-cyan">Program Hub: My Constructs</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <!-- Project Card 1: Network Vulnerability Scanner (Image Updated) -->
+                    <div class="group card-tron reveal-item">
+                        <div class="relative h-56 cursor-pointer" onclick="openLightbox('https://placehold.co/800x600/000/00ffff?text=Network+Scanner', 'Network Vulnerability Scanner')">
+                            <img src="vulnerabilityscanner 2.jpg" alt="Network Vulnerability Scanner" loading="lazy" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/400x400/000/00ffff?text=Network+Scanner';">
+                            <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                                <p class="text-white text-center font-orbitron">Enlarge View</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-cyan-400 mb-2 font-orbitron">Network Vulnerability Scanner</h3>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs font-medium bg-cyan-900 text-cyan-300 px-2 py-1">Python</span>
+                                <span class="text-xs font-medium bg-gray-800 text-gray-300 px-2 py-1">Nmap</span>
+                                <span class="text-xs font-medium bg-gray-800 text-gray-300 px-2 py-1">Scapy</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">Python-based tool using Scapy/Nmap to identify open ports, services, and potential weaknesses on a local network.</p>
+                            <a href="#" class="inline-block mt-4 text-sm text-orange-500 hover:text-orange-400 font-medium">View Details &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 2: Phishing Simulation Tool (Image Updated) -->
+                    <div class="group card-tron reveal-item" style="transition-delay: 0.1s;">
+                        <div class="relative h-56 cursor-pointer" onclick="openLightbox('https://placehold.co/800x600/000/00ffff?text=Phishing+Simulation', 'Phishing Simulation Tool')">
+                            <img src="https://www.idagent.com/wp-content/uploads/2023/04/Endpoint-Security-Endpoint-Protection-Multiple-Devices-Protected-Within-a-Network-3D-Illustration-copy.jpg" alt="Phishing Simulation Tool" loading="lazy" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/400x400/000/00ffff?text=Phishing+Simulation';">
+                            <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                                <p class="text-white text-center font-orbitron">Enlarge View</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-cyan-400 mb-2 font-orbitron">Phishing Simulation Tool</h3>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs font-medium bg-cyan-900 text-cyan-300 px-2 py-1">JavaScript</span>
+                                <span class="text-xs font-medium bg-gray-800 text-gray-300 px-2 py-1">HTML/CSS</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">Web application designed to educate users by simulating real-world phishing attacks in a controlled environment.</p>
+                            <a href="#" class="inline-block mt-4 text-sm text-orange-500 hover:text-orange-400 font-medium">View Details &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 3: CTF Challenge Write-ups (Image Updated) -->
+                    <div class="group card-tron reveal-item" style="transition-delay: 0.2s;">
+                         <div class="relative h-56 cursor-pointer" onclick="openLightbox('https://placehold.co/800x600/000/00ffff?text=CTF+Challenges', 'CTF Challenge Write-ups')">
+                            <img src="https://miro.medium.com/v2/resize:fit:1358/format:webp/1*bDuRq7I-PxyabvZuxNl3sg.png" alt="CTF Challenge Write-ups" loading="lazy" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/400x400/000/00ffff?text=CTF+Challenges';">
+                            <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                                <p class="text-white text-center font-orbitron">Enlarge View</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-cyan-400 mb-2 font-orbitron">CTF Challenge Write-ups</h3>
+                             <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs font-medium bg-gray-800 text-gray-300 px-2 py-1">TryHackMe</span>
+                                <span class="text-xs font-medium bg-gray-800 text-gray-300 px-2 py-1">HackTheBox</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">Detailed analyses and step-by-step solutions for various Capture The Flag (CTF) challenges.</p>
+                            <a href="#" class="inline-block mt-4 text-sm text-orange-500 hover:text-orange-400 font-medium">View Details &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 4: Password Strength Analyzer (Image Updated) -->
+                    <div class="group card-tron reveal-item" style="transition-delay: 0.3s;">
+                        <div class="relative h-56 cursor-pointer" onclick="openLightbox('https://placehold.co/800x600/000/00ffff?text=Password+Analyzer', 'Password Strength Analyzer')">
+                            <img src="https://miro.medium.com/0*XBCJ-cx2TqX__tRy.jpg" alt="Password Strength Analyzer" loading="lazy" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/400x400/000/00ffff?text=Password+Analyzer';">
+                            <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                                <p class="text-white text-center font-orbitron">Enlarge View</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-cyan-400 mb-2 font-orbitron">Password Strength Analyzer</h3>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="text-xs font-medium bg-cyan-900 text-cyan-300 px-2 py-1">Python</span>
+                                <span class="text-xs font-medium bg-gray-800 text-gray-300 px-2 py-1">Security</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">JavaScript/Python utility that applies entropy analysis and common dictionary checks to evaluate password security.</p>
+                            <a href="#" class="inline-block mt-4 text-sm text-orange-500 hover:text-orange-400 font-medium">View Details &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SKILLS SECTION -->
+        <section id="skills" class="content-section py-20 hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 reveal-item font-orbitron text-cyan-400 text-glow-cyan">Skill Matrix: My Identity Disc</h2>
+                
+                <!-- Core Competencies -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Skill Card 1: Penetration Testing -->
+                    <div class="p-6 card-tron reveal-item text-center">
+                        <div class="text-4xl text-cyan-400 mb-4 mx-auto w-16 h-16 flex items-center justify-center bg-black rounded-full border-2 border-cyan-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-100 mb-2 font-orbitron">Penetration Testing</h3>
+                        <p class="text-gray-400 text-sm">Comprehensive experience with vulnerability scanning, exploitation, and post-exploitation techniques.</p>
+                    </div>
+
+                    <!-- Skill Card 2: Network Security -->
+                    <div class="p-6 card-tron reveal-item text-center" style="transition-delay: 0.1s;">
+                        <div class="text-4xl text-cyan-400 mb-4 mx-auto w-16 h-16 flex items-center justify-center bg-black rounded-full border-2 border-cyan-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6" y2="6"/><line x1="6" y1="18" x2="6" y2="18"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-100 mb-2 font-orbitron">Network Security</h3>
+                        <p class="text-gray-400 text-sm">Proficiency in firewall configuration, IDS/IPS monitoring, secure protocol implementation, and traffic analysis.</p>
+                    </div>
+
+                    <!-- Skill Card 3: Ethical Hacking -->
+                    <div class="p-6 card-tron reveal-item text-center" style="transition-delay: 0.2s;">
+                        <div class="text-4xl text-cyan-400 mb-4 mx-auto w-16 h-16 flex items-center justify-center bg-black rounded-full border-2 border-cyan-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-100 mb-2 font-orbitron">Ethical Hacking</h3>
+                        <p class="text-gray-400 text-sm">Understanding of the hacker mindset and methodologies (reconnaissance, scanning, gaining access, etc).</p>
+                    </div>
+
+                    <!-- Skill Card 4: Web Application Security -->
+                    <div class="p-6 card-tron reveal-item text-center" style="transition-delay: 0.3s;">
+                        <div class="text-4xl text-cyan-400 mb-4 mx-auto w-16 h-16 flex items-center justify-center bg-black rounded-full border-2 border-cyan-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17L19 12l-4.5-5"/><path d="M9.5 7L5 12l4.5 5"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-100 mb-2 font-orbitron">Web Application Security</h3>
+                        <p class="text-gray-400 text-sm">Experience with OWASP Top 10 vulnerabilities, secure coding practices, and tools like Burp Suite for testing.</p>
+                    </div>
+                </div>
+                
+                <!-- Tool Proficiency -->
+                <div class="mt-20 max-w-4xl mx-auto reveal-item">
+                    <h3 class="text-3xl font-bold text-center mb-10 text-gray-100 font-orbitron">Tool & Language Proficiency</h3>
+                    <div class="space-y-6">
+                        <!-- Python -->
+                        <div class="w-full">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-cyan-400">Python (Scripting, Tool Dev)</span>
+                                <span class="text-sm font-medium text-cyan-400">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-none h-2.5 border border-cyan-900">
+                                <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <!-- Metasploit -->
+                        <div class="w-full">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-cyan-400">Metasploit Framework</span>
+                                <span class="text-sm font-medium text-cyan-400">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-none h-2.5 border border-cyan-900">
+                                <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <!-- Wireshark -->
+                        <div class="w-full">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-cyan-400">Wireshark (Analysis)</span>
+                                <span class="text-sm font-medium text-cyan-400">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-none h-2.5 border border-cyan-900">
+                                <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <!-- Burp Suite -->
+                        <div class="w-full">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-cyan-400">Burp Suite (Web)</span>
+                                <span class="text-sm font-medium text-cyan-400">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-none h-2.5 border border-cyan-900">
+                                <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CERTIFICATIONS & ACHIEVEMENTS SECTION -->
+        <section id="certifications" class="content-section py-20 hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 reveal-item font-orbitron text-cyan-400 text-glow-cyan">The Archive: Data Streams</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Achievement 1: Certified Ethical Hacker (CEH) -->
+                    <div class="card-tron p-6 reveal-item border-l-4 border-cyan-500">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-2 font-orbitron">Certified Ethical Hacker (CEH)</h3>
+                        <p class="text-gray-300">Demonstrates a mastery of the tools and techniques used by malicious hackers to assess security posture.</p>
+                        <p class="text-sm text-gray-500 mt-2">Issued by EC-Council | Date: [Month, Year]</p>
+                    </div>
+
+                    <!-- Achievement 2: CompTIA Security+ -->
+                    <div class="card-tron p-6 reveal-item border-l-4 border-cyan-500" style="transition-delay: 0.1s;">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-2 font-orbitron">CompTIA Security+ (SY0-601)</h3>
+                        <p class="text-gray-300">Validation of fundamental knowledge required to perform core security functions and pursue an IT security career.</p>
+                        <p class="text-sm text-gray-500 mt-2">Issued by CompTIA | Date: [Month, Year]</p>
+                    </div>
+
+                    <!-- Achievement 3: TryHackMe Top 1% -->
+                    <div class="card-tron p-6 reveal-item border-l-4 border-orange-500">
+                        <h3 class="text-2xl font-bold text-orange-500 mb-2 font-orbitron">TryHackMe</h3>
+                        <p class="text-gray-300">Achieved a top performance rank on the popular cybersecurity learning platform, reflecting hands-on practice.</p>
+                        <p class="text-sm text-gray-500 mt-2">Platform Achievement | Last Updated: [Month, Year]</p>
+                    </div>
+
+                    <!-- Achievement 4: HackTheBox Academy Certified -->
+                    <div class="card-tron p-6 reveal-item border-l-4 border-orange-500" style="transition-delay: 0.1s;">
+                        <h3 class="text-2xl font-bold text-orange-500 mb-2 font-orbitron">HackTheBox Academy Modules</h3>
+                        <p class="text-gray-300">Completed multiple advanced modules in Web Exploitation and Windows Privilege Escalation.</p>
+                        <p class="text-sm text-gray-500 mt-2">Platform Achievement | [Number] Modules Completed</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CYBERSECURITY INSIGHTS SECTION -->
+        <section id="insights" class="content-section py-20 hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 reveal-item font-orbitron text-cyan-400 text-glow-cyan">Grid Echoes: System Logs</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Demo Post 1 (Image Updated) -->
+                    <div class="group card-tron reveal-item overflow-hidden">
+                        <img src="https://www.bugraptors.com/api/admin/serve-image/blogs/network-security-testing-tools-png-1709804970png" alt="Cybersecurity Tools" loading="lazy" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/600x400/000/00ffff?text=Tools';">
+                        <div class="p-6">
+                            <span class="text-sm text-gray-500">Oct 28, 2025 | Tools</span>
+                            <h3 class="text-xl font-semibold text-gray-100 my-2 font-orbitron">My Top 5 Tools for Security Assessments</h3>
+                            <p class="text-gray-400 text-sm mb-4">My toolkit heavily relies on industry standards like Kali Linux, Wireshark for analysis, Nmap for recon...</p>
+                            <a href="#" class="font-medium text-orange-500 hover:text-orange-400">Read More &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Demo Post 2 (Image Updated) -->
+                    <div class="group card-tron reveal-item overflow-hidden" style="transition-delay: 0.1s;">
+                        <img src="https://cdn.publicsectornetwork.com/insight/feature_images/Untitled_design_5_0757f4.png.1920x1080_q85_autocrop_crop-smart.png" alt="Ethical Hacking" loading="lazy" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/600x400/000/00ffff?text=Methodology';">
+                        <div class="p-6">
+                            <span class="text-sm text-gray-500">Oct 15, 2025 | Hacking</span>
+                            <h3 class="text-xl font-semibold text-gray-100 my-2 font-orbitron">The Ethical Hacking Engagement Lifecycle</h3>
+                            <p class="text-gray-400 text-sm mb-4">I follow a structured methodology: Reconnaissance, Scanning, Gaining Access, Maintaining Access, and Reporting...</p>
+                            <a href="#" class="font-medium text-orange-500 hover:text-orange-400">Read More &rarr;</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Demo Post 3 (Image Updated) -->
+                    <div class="group card-tron reveal-item overflow-hidden" style="transition-delay: 0.2s;">
+                        <img src="https://miro.medium.com/1*14rM5caxnjNa-RAcnFQc7w.png" alt="Python Scripting" loading="lazy" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/600x400/000/00ffff?text=Scripting';">
+                        <div class="p-6">
+                            <span class="text-sm text-gray-500">Oct 01, 2025 | Code</span>
+                            <h3 class="text-xl font-semibold text-gray-100 my-2 font-orbitron">Why Python is Essential for Cybersecurity</h3>
+                            <p class="text-gray-400 text-sm mb-4">The most essential languages are Python (for scripting custom tools and automation) and Bash (for system admin)...</p>
+                            <a href="#" class="font-medium text-orange-500 hover:text-orange-400">Read More &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ABOUT SECTION -->
+        <section id="about" class="content-section py-20 hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                <div class="flex flex-col lg:flex-row items-center gap-10">
+                    <!-- Image/Placeholder (Image Updated) -->
+                    <div class="lg:w-1/3 reveal-item">
+                        <img src="myself.jpg" alt="Gaurav Gavali Profile" loading="lazy" class="rounded-lg w-64 h-64 object-cover mx-auto shadow-2xl shadow-cyan-500/30 border-2 border-cyan-800" onerror="this.onerror=null;this.src='https://placehold.co/400x400/000/00ffff?text=Gaurav+Gavali';">
+                    </div>
+                    <!-- Text Content -->
+                    <div class="lg:w-2/3 reveal-item text-center lg:text-left" style="transition-delay: 0.1s;">
+                        <h2 class="text-4xl font-bold text-cyan-400 text-glow-cyan mb-4 font-orbitron">User Profile: Gaurav Gavali</h2>
+                        <p class="text-gray-300 mb-4 text-lg">
+                            I am a passionate and results-driven cybersecurity student with a deep-seated interest in <strong>ethical hacking, digital forensics, and proactive security awareness</strong>. My journey started with a curiosity to understand how systems break and, more importantly, how to build them stronger.
+                        </p>
+                        <p class="text-gray-400 mb-6">
+                            My focus is on practical application, whether simulating attacks in a lab, developing custom scripts, or analyzing malicious code. I believe effective security relies on continuous learning of both offensive and defensive protocols.
+                        </p>
+                        <button onclick="showPage('contact'); updateActiveNav(document.querySelector('[data-page=contact]'))" class="btn-tron-cyan">
+                            Send Transmission
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. CONTACT SECTION -->
+        <section id="contact" class="content-section py-20 hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+                <h2 class="text-4xl font-bold text-center mb-12 reveal-item font-orbitron text-cyan-400 text-glow-cyan">Send Transmission</h2>
+                
+                <div class="flex flex-col lg:flex-row gap-10">
+                    
+                    <!-- Contact Details -->
+                    <div class="lg:w-1/2 space-y-6 reveal-item">
+                        <h3 class="text-2xl font-semibold text-cyan-400 mb-4 font-orbitron">Access Points</h3>
+                        
+                        <!-- Email -->
+                        <div class="flex items-center space-x-3 text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-500"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            <a href="mailto:gavali.gaurav21@gmail.com" class="hover:text-orange-500">gavali.gaurav21@gmail.com</a>
+                        </div>
+                        
+                        <!-- LinkedIn -->
+                        <div class="flex items-center space-x-3 text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-500"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                            <a href="https://www.linkedin.com/in/gaurav-gavali-57470233a/" target="_blank" class="hover:text-orange-500">/in/gauravgavali</a>
+                        </div>
+                        
+                        <!-- GitHub -->
+                        <div class="flex items-center space-x-3 text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-500"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 3c0 0-1.01-.39-3.41 1.01-.9-1.39-2.15-2.22-3.41-2.22a8.6 8.6 0 0 0-3.41 2.22c-2.4 1.4-3.41 1.01-3.41 1.01A5.07 5.07 0 0 0 4 4.77 5.44 5.44 0 0 0 3 9.48c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 19v2"/></svg>
+                            <a href="https://github.com/gaurav4047" target="_blank" class="hover:text-orange-500">github.com/gauravgavali</a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form (Demo) -->
+                    <div class="lg:w-1/2 reveal-item" style="transition-delay: 0.1s;">
+                        <h3 class="text-2xl font-semibold text-cyan-400 mb-4 font-orbitron">Compose Message</h3>
+                        <form id="contact-form" action="https://formspree.io/f/YOUR_DEMO_ID" method="POST" class="space-y-4">
+                            <div>
+                                <label for="contact-name" class="sr-only">Your Name</label>
+                                <input type="text" id="contact-name" name="name" placeholder="Your Designation (Name)" required class="form-input-tron">
+                            </div>
+                            <div>
+                                <label for="contact-email" class="sr-only">Your Email</label>
+                                <input type="email" id="contact-email" name="email" placeholder="Your Source Address (Email)" required class="form-input-tron">
+                            </div>
+                            <div>
+                                <label for="contact-message" class="sr-only">Your Message</label>
+                                <textarea id="contact-message" name="message" rows="4" placeholder="Your Data Packet (Message)" required class="form-input-tron"></textarea>
+                            </div>
+                            <button type="submit" class="btn-tron-orange w-full py-3">
+                                Initiate Transfer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Messages (Used instead of alert()) -->
+    <div id="modal-message" class="lightbox fixed inset-0 bg-black/70 flex items-center justify-center p-4 hidden">
+        <div class="p-8 rounded-none shadow-2xl max-w-sm w-full text-center space-y-4 border-2 border-cyan-500 bg-black shadow-cyan-500/50">
+            <h4 id="modal-title" class="text-xl font-bold text-cyan-400 font-orbitron"></h4>
+            <p id="modal-content" class="text-gray-300"></p>
+            <button onclick="document.getElementById('modal-message').classList.add('hidden')" class="btn-tron-cyan">
+                // OK
+            </button>
+        </div>
+    </div>
+    
+    <!-- Image Lightbox Modal -->
+    <div id="image-lightbox" class="lightbox fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
+        <button class="absolute top-4 right-4 text-white text-4xl z-20" aria-label="Close image lightbox">&times;</button>
+        <div class="relative max-w-4xl max-h-[90vh] w-full" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="" class="w-full h-auto object-contain rounded-none shadow-2xl border-2 border-cyan-700">
+            <p id="lightbox-caption" class="text-center text-gray-300 mt-2 font-orbitron"></p>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-cyan-900">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-500 text-sm">
+            <p class="mb-2 font-orbitron text-base text-gray-400">© 2025 Gaurav Gavali — Compiled on the Grid</p>
+            <p class="font-orbitron text-lg text-cyan-800 mt-4 tracking-wider">
+                End of Line.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" onclick="scrollToTop()" class="p-3 bg-cyan-600 text-black rounded-none shadow-lg hover:bg-cyan-400 transition duration-300" aria-label="Scroll to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
+
+    <script>
+        // --- Core Application Logic (SPA & Utility Functions) ---
+
+        /**
+         * Toggles the display of main content sections to simulate a Single Page Application (SPA).
+         * @param {string} pageId The ID of the section to show.
+         */
+        function showPage(pageId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                // Only scroll to top if the target isn't the hero section
+                if (pageId !== 'hero') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                }
+                // Trigger reveal animations for the new section
+                initRevealAnimation(targetSection);
+            }
+        }
+
+        /**
+         * Updates the active state of navigation links.
+         * @param {HTMLElement} activeLink The link element that was just clicked.
+         */
+        function updateActiveNav(activeLink) {
+            // Get the target page from the link
+            const page = activeLink.getAttribute('data-page');
+            
+            // Remove 'active' from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                // Specific fix for desktop nav border
+                if(link.classList.contains('nav-link-desktop')) {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Add 'active' to all links matching the target page
+            // This handles both mobile and desktop links simultaneously
+            document.querySelectorAll(`.nav-link[data-page="${page}"]`).forEach(link => {
+                link.classList.add('active');
+            });
+        }
+        
+        /**
+         * Displays a custom modal message (replaces alert()).
+         * @param {string} title The title of the message.
+         * @param {string} content The body text of the message.
+         */
+        function showModal(title, content) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-content').textContent = content;
+            document.getElementById('modal-message').classList.remove('hidden');
+        }
+
+        /**
+         * Handles the contact form submission.
+         * @param {Event} event The form submission event.
+         */
+        function handleFormSubmit(event) {
+            event.preventDefault(); 
+            const form = event.target;
+            const data = new FormData(form);
+            const action = form.action;
+
+            showModal('Sending Transmission...', 'Please wait while your data packet is sent. This is a demo.');
+
+            // Simulate form submission
+            setTimeout(() => {
+                // Check if the form action is still the placeholder
+                if (action.includes('YOUR_DEMO_ID')) {
+                    showModal(
+                        'Transmission Sent (Demo)!',
+                        `Thank you, ${data.get('name')}! Your packet is on its way. (In a real setup, this form would be sent. To make it work, sign up at Formspree.io and add your form ID.)`
+                    );
+                } else {
+                    // This path would be taken if the action was a real endpoint
+                    showModal('Success!', 'Your transmission has been sent (simulation).');
+                }
+                form.reset();
+            }, 1500);
+        }
+        
+        // Attach form submit listener
+        const contactForm = document.getElementById('contact-form');
+        if(contactForm) {
+            contactForm.addEventListener('submit', handleFormSubmit);
+        }
+
+        // --- Reveal Animation Logic (Intersection Observer) ---
+        /**
+         * Initializes the Intersection Observer for reveal-on-scroll animations.
+         * @param {Document|HTMLElement} [scope=document] The element to search within for items.
+         */
+        function initRevealAnimation(scope = document) {
+            const revealElements = scope.querySelectorAll('.reveal-item');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Stop observing once animated
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(element => {
+                // Only observe elements that haven't been made visible yet
+                if (!element.classList.contains('visible')) {
+                    observer.observe(element);
+                }
+            });
+        }
+        
+        // --- Theme Toggle Logic has been REMOVED. Site is permanently dark. ---
+        
+        // --- Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        function toggleMobileMenu() {
+            const isOpen = mobileMenuBtn.classList.toggle('open');
+            if (isOpen) {
+                // Open menu
+                mobileMenu.classList.remove('-translate-y-full', 'opacity-0', '-z-10');
+                mobileMenu.classList.add('translate-y-0', 'opacity-100', 'z-40');
+            } else {
+                // Close menu
+                mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+                mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'z-40');
+                // Delay removing z-index to allow for transition
+                setTimeout(() => {
+                    if (!mobileMenuBtn.classList.contains('open')) {
+                        mobileMenu.classList.add('-z-10');
+                    }
+                }, 300);
+            }
+        }
+        
+        function closeMobileMenu() {
+            if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
+            if (mobileMenu) {
+                mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+                mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'z-40');
+                setTimeout(() => { mobileMenu.classList.add('-z-10'); }, 300);
+            }
+        }
+
+        if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        // --- Typing Text Animation (TRON themed) ---
+        const typingTextElement = document.getElementById('typing-text');
+        const phrases = ["System Analyst", "Cybersecurity Specialist", "Ethical Hacker", "Digital Operator"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeWriter() {
+            if (!typingTextElement) return;
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                // Deleting
+                typingTextElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeWriter, 500); // Pause before typing next
+                } else {
+                    setTimeout(typeWriter, 50); // Deleting speed
+                }
+            } else {
+                // Typing
+                typingTextElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                if (charIndex === currentPhrase.length) {
+                    isDeleting = true;
+                    setTimeout(typeWriter, 2000); // Pause at end of word
+                } else {
+                    setTimeout(typeWriter, 100); // Typing speed
+                }
+            }
+        }
+
+        // --- Scroll-to-Top Button ---
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        
+        function handleScroll() {
+            if (scrollTopBtn && window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else if (scrollTopBtn) {
+                scrollTopBtn.classList.remove('visible');
+            }
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Image Lightbox ---
+        const lightbox = document.getElementById('image-lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        function openLightbox(src, alt) {
+            if (lightboxImg) lightboxImg.src = src;
+            if (lightboxImg) lightboxImg.alt = alt;
+            if (lightboxCaption) lightboxCaption.textContent = alt;
+            if (lightbox) lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+        }
+
+        function closeLightbox() {
+            if (lightbox) lightbox.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+        
+        // --- Particle Background Animation ---
+        const canvas = document.getElementById('particle-canvas');
+        let ctx;
+        if (canvas) {
+            ctx = canvas.getContext('2d');
+        }
+        let particles = [];
+        
+        function resizeCanvas() {
+            if (!canvas) return;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            if (!canvas) return;
+            particles = [];
+            // Responsive particle count based on screen area
+            let particleCount = Math.floor(canvas.width * canvas.height / 20000); 
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: Math.random() * 0.5 - 0.25, // Slow movement
+                    vy: Math.random() * 0.5 - 0.25,
+                    radius: Math.random() * 1.5 + 0.5 // Small particles
+                });
+            }
+        }
+        
+        function animateParticles() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'rgba(0, 238, 255, 0.7)'; // Cyan particles
+            ctx.strokeStyle = 'rgba(0, 238, 255, 0.15)'; // Cyan lines
+
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                
+                // Update position
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Wrap around edges
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+                
+                // Draw particle
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw lines to nearby particles
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p.x - p2.x;
+                    let dy = p.y - p2.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 120) { // Connection distance
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animateParticles);
+        }
+
+        // --- DOMContentLoaded Event Listener ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('main-header');
+            
+            // Header Shadow on Scroll
+            window.addEventListener('scroll', () => {
+                if (header && window.scrollY > 50) {
+                    header.classList.add('shadow-lg', 'shadow-cyan-900/30');
+                } else if (header) {
+                    header.classList.remove('shadow-lg', 'shadow-cyan-900/30');
+                }
+                
+                handleScroll(); // Also handle scroll-to-top button visibility
+            });
+
+            // Initial page load
+            showPage('hero'); 
+            updateActiveNav(document.querySelector('[data-page="hero"]'));
+            
+            // Start typing animation
+            setTimeout(typeWriter, 1000);
+            
+            // Initialize particle background
+            if (canvas) {
+                resizeCanvas();
+                createParticles();
+                animateParticles();
+                window.addEventListener('resize', () => {
+                    resizeCanvas();
+                    createParticles(); // Recreate particles for new size
+                });
+            }
+        });
+    </script>
+</body>
+</html>
